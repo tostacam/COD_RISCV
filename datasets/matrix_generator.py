@@ -26,7 +26,7 @@ def generate_matrix(filename, seed):
     # write matrix data
     for row in matrix:
       for value in row:
-        f.write(struct.pack("<f", value))
+        f.write(struct.pack("<d", value))
 
   print(f"Generated {filename}")
 

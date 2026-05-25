@@ -14,7 +14,7 @@ def read_matrix(filename):
       row = []
     
       for _ in range(cols):
-        value = struct.unpack("<f", f.read(4))[0]
+        value = struct.unpack("<d", f.read(8))[0]
         row.append(value)
     
       matrix.append(row)

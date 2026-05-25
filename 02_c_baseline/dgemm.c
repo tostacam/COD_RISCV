@@ -20,7 +20,7 @@ void dgemm(void* args_ptr){
   int n = A.rows;
   for(int i = 0; i < n; ++i){
     for(int j = 0; j < n; ++j){
-      float cij = C.data[i*n+j]; /* cij = C[i][j] */
+      double cij = C.data[i*n+j]; /* cij = C[i][j] */
       for(int k = 0; k < n; ++k)
         cij += A.data[i*n+k] * B.data[k*n+j];  /* cij += A[i][k] * B[k][j] */
       C.data[i*n+j] = cij; /* C[i][j] = cij */
@@ -43,7 +43,7 @@ int main(){
   matrix C;
   C.rows = A.rows;
   C.cols = A.cols;
-  C.data = calloc(C.rows * C.cols, sizeof(float));
+  C.data = calloc(C.rows * C.cols, sizeof(double));
 
   dgemm_args args = { .A = A, .B = B, .C = C };
 

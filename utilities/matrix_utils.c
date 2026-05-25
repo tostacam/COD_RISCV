@@ -12,7 +12,7 @@ matrix read_matrix(FILE* file){
   fread(&m.rows, sizeof(int), 1, file);
   fread(&m.cols, sizeof(int), 1, file);
 
-  m.data = malloc(m.rows * m.cols * sizeof(float));
+  m.data = malloc(m.rows * m.cols * sizeof(double));
 
   if(m.data == NULL){
     printf("Allocation failed\n");
@@ -20,7 +20,7 @@ matrix read_matrix(FILE* file){
     exit(1);
   }
 
-  size_t elements_read = fread(m.data, sizeof(float), m.rows * m.cols, file);
+  size_t elements_read = fread(m.data, sizeof(double), m.rows * m.cols, file);
 
   if(elements_read != m.rows * m.cols){
     printf("Failed to read all elements\n");
