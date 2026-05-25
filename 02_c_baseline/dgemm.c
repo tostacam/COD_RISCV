@@ -1,16 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../utilities/matrix_utils.h"
+#include "../utilities/benchmark.h"
 
 #define MATRIX_SIZE 4
 
-void dgemm(matrix A, matrix B, matrix C){
+typedef struct {
+  matrix A;
+  matrix B;
+  matrix C;
+} dgemm_args;
+
+void dgemm(void* args_ptr){
+  dgemm_args* args = (dgemm_args*) args_ptr;
+  matrix A = args->A;
+  matrix B = args->B;
+  matrix C = args->C;
+
   int n = A.rows;
   for(int i = 0; i < n; ++i){
     for(int j = 0; j < n; ++j){
       float cij = C.data[i+j*n]; /* cij = C[i][j] */
       for(int k = 0; k < n; ++k)
-        cij = A.data[i+k*n] * B.data[k+j*n];  /* cij += A[i][k] * B[k][j] */
+        cij += A.data[i+k*n] * B.data[k+j*n];  /* cij += A[i][k] * B[k][j] */
       C.data[i+j*n] = cij; /* C[i][z] = cij */
     }
   }
@@ -33,9 +45,12 @@ int main(){
   C.cols = A.cols;
   C.data = calloc(C.rows * C.cols, sizeof(float));
 
-  dgemm(A, B, C);
+  dgemm_args args = { .A = A, .B = B, .C = C };
 
-  // print_matrix(C);
+  double elapsed = benchmark(dgemm, &args);
+
+   print_matrix(C);
+  printf("Execution time: %f seconds \n", elapsed);
 
   release_matrix(A);
   release_matrix(B);
