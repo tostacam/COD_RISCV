@@ -1,26 +1,38 @@
+from pathlib import Path
 import struct
 import random
 
-# set seed
-# A -> 123
-# B -> 456
-# C -> 789
-random.seed(123)
+DATASET_DIR = Path(__file__).resolve().parent
 
-# matrix size
-rows = 64
-cols = 64
+ROWS = 4
+COLS = 4
 
-matrix = [
-  [random.random() for _ in range(cols)]
-  for _ in range(rows)
-]
+SEEDS = {
+  "A": 123,
+  "B": 456,
+  "C": 789
+}
 
-with open("matrix_64x64_B.bin", "wb") as f:
-  # write dimensions
-  f.write(struct.pack(">ii", rows, cols))
+def generate_matrix(filename, seed):
+  random.seed(seed)
 
-  # write matrix data
-  for row in matrix:
-    for value in row:
-      f.write(struct.pack("f", value))
+  matrix = [
+    [random.random() for _ in range(COLS)] for _ in range(ROWS)    
+  ]
+
+  filepath = DATASET_DIR / filename
+  with open(filepath, "wb") as f:
+    # write dimensions on first 8 bytes
+    f.write(struct.pack("<ii", ROWS, COLS))
+
+    # write matrix data
+    for row in matrix:
+      for value in row:
+        f.write(struct.pack("<f", value))
+
+  print(f"Generated {filename}")
+
+# generate all matrices
+for name, seed in SEEDS.items():
+  filename = f"matrix_{ROWS}x{COLS}_{name}.bin"
+  generate_matrix(filename, seed)
