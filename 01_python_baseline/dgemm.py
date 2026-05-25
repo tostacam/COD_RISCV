@@ -2,7 +2,7 @@ from utilities.matrix_io import read_matrix
 from utilities.matrix_utils import zero_matrix
 from utilities.benchmark import benchmark
 
-ROWS = COLS = 512
+ROWS = COLS = 1024
 
 def dgemm(A , B, C):
   for i in range(ROWS):
