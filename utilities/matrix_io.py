@@ -20,3 +20,11 @@ def read_matrix(filename):
       matrix.append(row)
 
     return matrix
+
+def print_matrix(rows, cols, matrix):
+  print(f"Rows: {rows}");
+  print(f"Cols: {cols}");
+  for i in range(rows):
+    for j in range(cols):
+      print(f"{matrix[i][j]:.6f}", end=" ")
+    print("")

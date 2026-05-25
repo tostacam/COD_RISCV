@@ -1,8 +1,8 @@
-from utilities.matrix_io import read_matrix
+from utilities.matrix_io import read_matrix, print_matrix
 from utilities.matrix_utils import zero_matrix
 from utilities.benchmark import benchmark
 
-ROWS = COLS = 1024
+ROWS = COLS = 4
 
 def dgemm(A , B, C):
   for i in range(ROWS):
@@ -15,5 +15,7 @@ B = read_matrix(f"matrix_{ROWS}x{COLS}_B.bin")
 C = zero_matrix(ROWS, COLS)
 
 elapsed = benchmark(dgemm, A, B, C)
+
+# print_matrix(ROWS, COLS, C)
 
 print(f"Execution time: {elapsed:.6f} seconds")
