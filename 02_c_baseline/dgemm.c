@@ -3,7 +3,7 @@
 #include "../utilities/matrix_utils.h"
 #include "../utilities/benchmark.h"
 
-#define MATRIX_SIZE 4
+#define MATRIX_SIZE 1024
 
 typedef struct {
   matrix A;
@@ -20,10 +20,10 @@ void dgemm(void* args_ptr){
   int n = A.rows;
   for(int i = 0; i < n; ++i){
     for(int j = 0; j < n; ++j){
-      float cij = C.data[i+j*n]; /* cij = C[i][j] */
+      float cij = C.data[i*n+j]; /* cij = C[i][j] */
       for(int k = 0; k < n; ++k)
-        cij += A.data[i+k*n] * B.data[k+j*n];  /* cij += A[i][k] * B[k][j] */
-      C.data[i+j*n] = cij; /* C[i][z] = cij */
+        cij += A.data[i*n+k] * B.data[k*n+j];  /* cij += A[i][k] * B[k][j] */
+      C.data[i*n+j] = cij; /* C[i][j] = cij */
     }
   }
 }
@@ -49,7 +49,9 @@ int main(){
 
   double elapsed = benchmark(dgemm, &args);
 
-   print_matrix(C);
+  //print_matrix(A);
+  //print_matrix(B);
+  //print_matrix(C);
   printf("Execution time: %f seconds \n", elapsed);
 
   release_matrix(A);
