@@ -4,13 +4,11 @@ import random
 
 DATASET_DIR = Path(__file__).resolve().parent
 
-ROWS = 4
-COLS = 4
+ROWS, COLS = 4
 
 SEEDS = {
-  "A": 123,
-  "B": 456,
-  "C": 789
+  "A": 1234,
+  "B": 5678,
 }
 
 def generate_matrix(filename, seed):
