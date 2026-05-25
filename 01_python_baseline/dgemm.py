@@ -1,5 +1,4 @@
-from utilities.matrix_io import read_matrix, print_matrix
-from utilities.matrix_utils import zero_matrix
+from utilities.matrix_utils import read_matrix, zero_matrix, print_matrix
 from utilities.benchmark import benchmark
 
 ROWS = COLS = 4
