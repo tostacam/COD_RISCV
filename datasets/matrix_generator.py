@@ -4,7 +4,7 @@ import random
 
 DATASET_DIR = Path(__file__).resolve().parent
 
-ROWS, COLS = 4
+ROWS = COLS = 1024
 
 SEEDS = {
   "A": 1234,
