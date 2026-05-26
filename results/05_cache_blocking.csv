@@ -1,0 +1,7 @@
+implementation,matrix_size,threads,time_sec,gflops,validated
+05_cache_blocking,64,1,1.7e-05,30.840470588235295,True
+05_cache_blocking,128,1,0.000146,28.728109589041097,True
+05_cache_blocking,256,1,0.001188,28.24447138047138,True
+05_cache_blocking,512,1,0.009639,27.84889054881212,True
+05_cache_blocking,1024,1,0.084948,25.279978904741725,True
+05_cache_blocking,2048,1,0.739077,23.245032904555277,True
