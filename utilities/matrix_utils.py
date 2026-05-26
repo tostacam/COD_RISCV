@@ -3,13 +3,11 @@ import struct
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 
-def read_matrix(filename): 
+def read_matrix(size, filename): 
   matrix_path = ROOT_DIR / "datasets" / filename
+  rows = cols = size
   with open(matrix_path, "rb") as f:
-    # read dimensions from first 8 bytes
-    rows, cols = struct.unpack("<ii", f.read(8))
     matrix = []
-
     for _ in range(rows):
       row = []
     
@@ -35,7 +33,7 @@ def compare_matrix(m1, m2, epsilon=1e-9):
 
   for i in range(rows):
     for j in range(cols):
-      if abs(m1[i][j] != m2[i][j]) > epsilon:
+      if abs(m1[i][j] - m2[i][j]) > epsilon:
         print(f"Mismatch at ({i}, {j})")
         print(f"Expected: {m2[i][j]}")
         print(f"Got:      {m1[i][j]}")
