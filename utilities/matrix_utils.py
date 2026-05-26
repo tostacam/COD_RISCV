@@ -29,5 +29,19 @@ def print_matrix(rows, cols, matrix):
       print(f"{matrix[i][j]:.6f}", end=" ")
     print("")
 
+def compare_matrix(m1, m2, epsilon=1e-9):
+  rows = len(m1)
+  cols = len(m1[0])
+
+  for i in range(rows):
+    for j in range(cols):
+      if abs(m1[i][j] != m2[i][j]) > epsilon:
+        print(f"Mismatch at ({i}, {j})")
+        print(f"Expected: {m2[i][j]}")
+        print(f"Got:      {m1[i][j]}")
+        return False
+
+  return True
+
 def zero_matrix(rows, cols):
   return [ [0.0 for _ in range(cols)] for _ in range(rows) ]
