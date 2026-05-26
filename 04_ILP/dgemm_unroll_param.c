@@ -40,7 +40,7 @@ void dgemm(void* args_ptr){
           sum[r] = vfmaq_f64(sum[r], a[r], b[r]);
       }
 
-      float64x2_t sum_vec;
+      float64x2_t sum_vec = vdupq_n_f64(0.0);
       for(int r = 0; r < UNROLL; ++r)
         sum_vec = vaddq_f64(sum_vec, sum[r]);
 
