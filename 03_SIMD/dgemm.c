@@ -3,8 +3,6 @@
 #include "../utilities/matrix_utils.h"
 #include "../utilities/benchmark.h"
 
-#define MATRIX_SIZE 1024
-
 typedef struct {
   matrix A;
   matrix BT;
@@ -44,17 +42,19 @@ void dgemm(void* args_ptr){
   }
 }
 
-int main(){
-  int n = MATRIX_SIZE;
-  char filenameA[256], filenameB[256];
-  snprintf(filenameA, sizeof(filenameA), "./datasets/matrix_%dx%d_A.bin", n, n);
-  snprintf(filenameB, sizeof(filenameB), "./datasets/matrix_%dx%d_B.bin", n, n);
+int main(int argc, char** argv){
+  int size = atoi(argv[1]);
+
+  char filenameA[256], filenameB[256], filenameC[256];
+  snprintf(filenameA, sizeof(filenameA), "./datasets/matrix_%dx%d_A.bin", size, size);
+  snprintf(filenameB, sizeof(filenameB), "./datasets/matrix_%dx%d_B.bin", size, size);
+  snprintf(filenameC, sizeof(filenameC), "./datasets/matrix_%dx%d_C_output.bin", size, size);
   
   FILE* fileA = fopen(filenameA, "rb");
   FILE* fileB = fopen(filenameB, "rb");
 
-  matrix A = read_matrix(fileA);
-  matrix B = read_matrix(fileB);
+  matrix A = read_matrix(size, fileA);
+  matrix B = read_matrix(size, fileB);
   matrix BT = transpose_matrix(B);
  
   matrix C;
@@ -69,7 +69,13 @@ int main(){
   //print_matrix(A);
   //print_matrix(B);
   //print_matrix(C);
-  printf("Execution time: %f seconds \n", elapsed);
+
+  FILE* fileC = fopen(filenameC, "wb");
+  fwrite(C.data, sizeof(double), C.rows * C.cols, fileC);
+  fclose(fileC);
+
+  // printing raw timing to read from python
+  printf("%f\n", elapsed);
 
   release_matrix(A);
   release_matrix(B);
