@@ -45,7 +45,7 @@ for size in MATRIX_SIZES:
     writer = csv.writer(file)
 
     writer.writerow([
-      "01_python_baseline",
+      "02_c_baseline",
       size,
       1,
       elapsed,
