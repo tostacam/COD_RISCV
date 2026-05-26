@@ -33,7 +33,7 @@ void dgemm(void* args_ptr){
         
         for(int r = 0; r < UNROLL; ++r){
           a[r] = vld1q_f64(&A.data[i*n + k + r*2]);
-          b[r] = vld1q_f64(&BT.data[i*n + k + r*2]);
+          b[r] = vld1q_f64(&BT.data[j*n + k + r*2]);
         }
 
         for(int r = 0; r < UNROLL; ++r)
