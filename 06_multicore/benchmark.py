@@ -49,7 +49,7 @@ for size in MATRIX_SIZES:
     writer.writerow([
       "06_multicore",
       size,
-      1,
+      THREAD_COUNT,
       elapsed,
       gflops,
       validated
