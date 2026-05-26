@@ -20,9 +20,6 @@ def generate_matrix(filename, seed, size):
 
   filepath = DATASET_DIR / filename
   with open(filepath, "wb") as f:
-    # write dimensions on first 8 bytes
-    f.write(struct.pack("<ii", size, size))
-
     # write matrix data
     for row in matrix:
       for value in row:
