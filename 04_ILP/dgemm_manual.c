@@ -12,6 +12,7 @@ typedef struct {
 } dgemm_args;
 
 #include <arm_neon.h> /* for MacOS M3 ARM */
+#define UNROLL 4
 
 void dgemm(void* args_ptr){
   dgemm_args* args = (dgemm_args*) args_ptr;
@@ -22,25 +23,34 @@ void dgemm(void* args_ptr){
   size_t n = A.rows;
   for(size_t i = 0; i < n; ++i){
     for(size_t j = 0; j < n; ++j){
-
       float64x2_t sum0 = vdupq_n_f64(0.0);
       float64x2_t sum1 = vdupq_n_f64(0.0);
+      float64x2_t sum2 = vdupq_n_f64(0.0);
+      float64x2_t sum3 = vdupq_n_f64(0.0);
 
-      for(size_t k = 0; k < n; k += 4){
-        float64x2_t a0 = vld1q_f64(&A.data[i*n + k]);
-        float64x2_t a1 = vld1q_f64(&A.data[i*n + k + 2]);
-        float64x2_t b0 = vld1q_f64(&BT.data[j*n + k]);
-        float64x2_t b1 = vld1q_f64(&BT.data[j*n + k + 2]);
-
-        // sum += a * b
+      float64x2_t a0, a1, a2, a3;
+      float64x2_t b0, b1, b2, b3;
+      for(size_t k = 0; k < n; k += 2 * UNROLL){
+        a0 = vld1q_f64(&A.data[i*n + k]); 
+        a1 = vld1q_f64(&A.data[i*n + k + 2]); 
+        a2 = vld1q_f64(&A.data[i*n + k + 4]); 
+        a3 = vld1q_f64(&A.data[i*n + k + 6]); 
+        b0 = vld1q_f64(&BT.data[j*n + k]); 
+        b1 = vld1q_f64(&BT.data[j*n + k + 2]); 
+        b2 = vld1q_f64(&BT.data[j*n + k + 4]); 
+        b3 = vld1q_f64(&BT.data[j*n + k + 6]); 
+        
         sum0 = vfmaq_f64(sum0, a0, b0);
         sum1 = vfmaq_f64(sum1, a1, b1);
+        sum2 = vfmaq_f64(sum2, a2, b2);
+        sum3 = vfmaq_f64(sum3, a3, b3);
       }
 
-      float64x2_t sum_vec = vaddq_f64(sum0, sum1);
-      double sum = vgetq_lane_f64(sum_vec, 0) + vgetq_lane_f64(sum_vec, 1);
+      float64x2_t sum_vec = vdupq_n_f64(0.0);
+      sum_vec = vaddq_f64(sum_vec, vaddq_f64(sum0, sum1));
+      sum_vec = vaddq_f64(sum_vec, vaddq_f64(sum2, sum3));
 
-      C.data[i*n+j] = sum;
+      C.data[i*n + j] = vgetq_lane_f64(sum_vec, 0) + vgetq_lane_f64(sum_vec, 1);
     }
   }
 }
