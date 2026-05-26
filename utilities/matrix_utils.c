@@ -34,6 +34,28 @@ matrix read_matrix(FILE* file){
   return m;
 }
 
+matrix transpose_matrix(matrix m){
+  matrix t;
+
+  t.rows = m.cols;
+  t.cols = m.rows;
+
+  t.data = malloc(t.rows * t.cols * sizeof(double));
+
+  if(t.data == NULL){
+    printf("Allocation failed");
+    exit(1);
+  }
+
+  for(size_t i = 0; i < m.rows; ++i){
+    for(size_t j = 0; j < m.cols; ++j){
+      t.data[j * t.cols + i] = m.data[i * m.cols + j];
+    }
+  }
+
+  return t;
+}
+
 void release_matrix(matrix m){
   free(m.data);
 }
@@ -42,8 +64,8 @@ void print_matrix(matrix m){
   printf("Rows: %d\n", m.rows);
   printf("Cols: %d\n", m.cols);
 
-  for(int i = 0; i < m.rows; ++i){
-    for(int j = 0; j < m.cols; ++j){
+  for(size_t i = 0; i < m.rows; ++i){
+    for(size_t j = 0; j < m.cols; ++j){
       printf("%f ", m.data[i * m.cols + j]);
     }
     printf("\n");

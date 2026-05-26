@@ -11,6 +11,8 @@ typedef struct{
 
 matrix read_matrix(FILE* file);
 
+matrix transpose_matrix(matrix m);
+
 void release_matrix(matrix m);
 
 void print_matrix(matrix m);
